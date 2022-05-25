@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <title>땡스피드 - 로그인</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <!-- 네비게이션 바 시작 -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                  aria-expanded="false">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/">로그인</a>
+          </div>
+  
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                  <li>
+                      <a href="/">Home</a>
+                  </li>
+                  <li>
+                      <a href="/mypage.html">마이페이지</a>
+                  </li>
+                  <li>
+                      <a id="joinmenu" href="/join.html">가입</a>
+                  </li>
+                  <li class="active">
+                      <a id="loginmenu" href="/login.html">로그인</a>
+                  </li>
+ 
+              </ul>
+          </div>
+          <!-- /.navbar-collapse -->
+      </div>
+      <!-- /.container-fluid -->
+  </nav>
+<br>
+<br>
+<br>
+<br>
+<br>
+ 
+  <!-- 네비게이션 바 끝 -->
+ 
+<!-- 가입 폼 시작 -->
+<div class="container">
+        <h1>로그인 해주세요!</h1>
+ 
+        <div class="form-group">
+          <label for="email">Email address:</label>
+          <input type="email" class="form-control" id="email">
+        </div>
+    
+        <div class="form-group">
+          <label for="pwd">Password:</label>
+          <input type="password" class="form-control" id="pwd">
+        </div>
+    
+        <button type="button" class="btn btn-default login">로그인</button>
+ 
+    </div>
+    <!-- 가입 폼 끝 -->
+ 
+ 
+    <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+    <script>
+      var firebaseEmailAuth; //파이어베이스 email 인증 모듈 전역변수
+      var firebaseDatabase; //파이어베이스 db 모듈 전역변수
+      var userInfo; //가입한 유저의 정보. object 타입
+      //파이어 베이스 초기화 코드
+      const firebaseConfig = {
+      apiKey: "AIzaSyAvjWnfqbS9sOAvIpEgTvcmphwx80kjrmg",
+      authDomain: "cooking-fe116.firebaseapp.com",
+      databaseURL: "https://cooking-fe116-default-rtdb.firebaseio.com",
+      projectId: "cooking-fe116",
+      storageBucket: "cooking-fe116.appspot.com",
+      messagingSenderId: "384235512086",
+      appId: "1:384235512086:web:33dc2b31431965cc99b037"
+    };
+      firebase.initializeApp(firebaseConfig);
+
+    firebaseEmailAuth = firebase.auth(); //파이어베이스 인증 객체
+    firebaseDatabase = firebase.firebaseDatabase
+    
+ 
+    //제이쿼리를 사용한다.
+    $(document).ready(function(){
+      
+      //가입버튼 눌렀을 때
+      $(document).on('click','.login',function(){
+        
+        //제이쿼리 선택자와 val() 함수를 이용해서 이메일,비밀번호 값을 가져온다. 
+        var email = $('#email').val();
+        var password = $('#pwd').val();
+       // alert("로그인 버튼 눌렸음" + email +":"+ password);
+    
+    //파이어베이스 이메일 로그인 함수
+    firebaseEmailAuth.signInWithEmailAndPassword(email, password)
+   .then(function(firebaseUser) {
+ 
+       //성공하면 firebaseUser에 유저 정보 값이 담겨 넘어온다.
+       loginSuccess(firebaseUser);
+ 
+   })
+  .catch(function(error) {
+       // 실패했을 때 에러 처리
+       alert(error);
+       alert("로그인 실패");
+  });
+    
+      });
+    });
+    
+    //로그인 성공했을 때
+    function loginSuccess(firebaseUser){
+       alert("로그인 성공");
+ 
+  //   //로그인 성공한 유저 id 확인해 보기 - firebase database에 접근해서 데이터 조회 하는 함수
+  //  firebaseDatabase.ref("users/"+firebaseUser.uid).once('value').then(function(snapshot){
+  //       //alert(snapshot.val().name)
+  //   });
+ 
+    //메인 페이지로 이동
+    window.location.href = "/index.html"
+    }
+ 
+    
+    </script>
+ 
+   
+</body>
+</html>
