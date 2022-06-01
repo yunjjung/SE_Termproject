@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="ko">
- 
+
 <head>
-  <title>감사일기</title>
+  <title>한끼 해결</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
- 
- 
+  <link rel="stylesheet" href="title.css">
+
 </head>
- 
+
 <body>
- 
+
   <!-- 네비게이션 바 시작 -->
   <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
@@ -25,6 +25,7 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
+              
               </button>
               <a class="navbar-brand" href="/">한끼 해결</a>
           </div>
@@ -35,16 +36,21 @@
                   <li class="active">
                       <a href="/">Home</a>
                   </li>
-                  <li>
-                      <a href="/mypage.html">마이페이지</a>
-                  </li>
+                 
                   <li>
                       <a id="joinmenu" href="/join.html">가입</a>
                   </li>
                   <li>
                       <a id="loginmenu" href="/login.html">로그인</a>
                   </li>
- 
+                  <li>
+                    <a id="postSetMenu" href=></a>
+                </li>
+                <li>
+                  <a id="postGetMenu" href=></a>
+              </li>
+                 
+
               </ul>
           </div>
           <!-- /.navbar-collapse -->
@@ -56,33 +62,29 @@
 <br>
 <br>
 <br>
- 
+
   <!-- 네비게이션 바 끝 -->
- 
- 
- 
-  <!-- 점보트론 시작 -->
-  <div class="container">
-    <div class="jumbotron">
-      <h1>
-        <span style="color:white">당신만의 레시피를 공유해주세요.</span>
-      </h1>
-      <p>
-        <span style="color:white">땡스피드는 오늘 하루 있었던 즐거운일, 감사한일, 행복한일을 적으며 하루를 마무리하는 게시판입니다.</span>
-      </p>
-    </div>
-  </div>
-  <br>
-  <!-- 점보트론 끝 -->
- 
- 
-  <!-- 쓰기 텍스트 필드 시작-->
+
+
+
+  <!-- 메이지 메인 -->
   <div class="container">
     <div class="form-group">
-      <label for="comment">오늘의 감사:</label>
-      <textarea class="form-control" rows="5" id="comment" placeholder="오늘 하루 감사한일을 적어보세요:)"></textarea>
+    <div class="container-img">
+    <img src="jumbo.jpg" alt = "" width ="100%" height="20%"></div>
+    <!-- <div class="container-text"> -->
+    <div class="container-text">당신의 레시피를<br>공유해주세요</div></div>
+    </div>
+  </div>
+  <!-- 메인 이미지 -->
+
+  <!-- 쓰기 텍스트 필드 시작-->
+  <div class="contain">
+    <div class="form-group">
+      <label for="comment">당신의 한끼:</label>
+      <textarea class="form-control" rows="5" id="comment" placeholder="오늘 당신의 한끼를 적어주세요"></textarea>
       <br>
- 
+
       <!-- 쓰기 버튼 가운데 정렬 -->
       <div class="text-center">
         <button type="button" class="btn btn-success write" id="write" name="write">쓰기</button>
@@ -90,44 +92,183 @@
     </div>
   </div>
   <!-- 쓰기 텍스트 필드 끝-->
- 
- 
- 
+
+
+
   <!-- 감사리스트 출력하기-->
   <div class="container">
     <hr>
-    <h3>감사리스트</h3>
+    <h3>여러분의 한끼</h3>
     <br>
     <!-- 감사 리스트 붙일 곳 -->
     <div class="thanksList"></div>
   </div>
- 
- 
-  <!--스크립트 부분. 자신의 스크립트 코드로 변경하세요! -->
+
+  <!--현재 시간을 가져오는 js 파일 -->
+  <script src="./js/time.js"></script>
+
+
+    <!--스크립트 부분. 자신의 스크립트 코드로 변경하세요! -->
     <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
     <script>
-      var firebaseEmailAuth; //파이어베이스 email 인증 모듈 전역변수
-      var firebaseDatabase; //파이어베이스 db 모듈 전역변수
-      var userInfo; //가입한 유저의 정보. object 타입
-      //파이어 베이스 초기화 코드
-      const firebaseConfig = {
-      apiKey: "AIzaSyAvjWnfqbS9sOAvIpEgTvcmphwx80kjrmg",
-      authDomain: "cooking-fe116.firebaseapp.com",
-      databaseURL: "https://cooking-fe116-default-rtdb.firebaseio.com",
-      projectId: "cooking-fe116",
-      storageBucket: "cooking-fe116.appspot.com",
-      messagingSenderId: "384235512086",
-      appId: "1:384235512086:web:33dc2b31431965cc99b037"
-    };
-      firebase.initializeApp(firebaseConfig);
-   
-    //   firebaseEmailAuth = firebase.auth(); //파이어베이스 인증 객체
-    //   firebaseDatabase = firebase.database(); //파이어베이스 데이터베이스 객체
- 
+        var firebaseEmailAuth; //파이어베이스 email 인증 모듈 전역변수
+        var firebaseDatabase; //파이어베이스 db 모듈 전역변수
+        //파이어 베이스 초기화 코드
+
+        var name; //유저 이름
+        var loginUserKey; //로그인한 유저의 부모 key
+        var userInfo; //로그인한 유저의 정보 object type
+        var comment; //유저가 쓴글 내용 저장
+        var firebaseConfig = {
+            apiKey: "AIzaSyDfyKJQoZV33T0cTrQFroonu2wbA9tBL8o",
+            authDomain: "test2-25cd0.firebaseapp.com",
+            databaseURL: "https://test2-25cd0-default-rtdb.firebaseio.com",
+            projectId: "test2-25cd0",
+            storageBucket: "test2-25cd0.appspot.com",
+            messagingSenderId: "845884502935",
+            appId: "1:845884502935:web:a149b9f3198458707b4ad2",
+            measurementId: "G-Y6W6PVR7X8"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        firebaseEmailAuth = firebase.auth();
+        //firebaseEmailAuth = firebase.auth();
+        firebaseDatabase = firebase.database();
+
+    //세션 체크 함수
+    userSessionCheck();
+    $(document).ready(function () {
+
+//메인화면 감사일기 쓰기버튼 눌렀을 때
+$(document).on('click', '.write', function () {
+  
+  //네비게이션 메뉴의 text값 가져오기 - 자바스크립트 dom 방식으로 가져왔다.
+  var seseionCheck = document.getElementById("loginmenu").textContent;
+
+  //내가 쓴글 가져오기 - jquery방식으로 가져왔다.
+    comment = $('#comment').val();
+  if (seseionCheck == "로그아웃") {
+    //저장하기
+    saveThanks();
+  } else {
+    alert("로그인이 필요한 서비스 입니다.")
+  }
+});
+});
+
+
+
+//쓰기 버튼 눌렀을 때 호출 되는 함수
+function saveThanks() {
+  
+  //thanks 라는 테이블을 만들고 하위 데이터에 유저 아이디를 넣어준다. 그곳에 push로 가상의 키를 넣고, 객체를 넣어준다.!!!!
+  var thankRef = firebaseDatabase.ref("meal");
+
+  // 해당 객체의 key 값이 자동으로 생성된다.
+  var thank = thankRef.push(); // 해당 객체의 key 값이 자동으로 생성된다.
+
+  //로그인한 유저의 pk값,이름,내용,시간 데이터
+  var obj = {
+    userkey: loginUserKey,
+    name: name,
+    comment: comment,
+    createtime: currentTime
+  };
+  //위에서 thankRef.push()로 만들어진 key아래 위치에 저장해준다.
+  thank.set(obj);
+
+  alert("당신의 한끼가 공유되었습니다.");
+
+  $('#comment').val("");
+}
+
+
+    //유저가 로그인 했는지 안했는지 확인해주는 함수
+    function userSessionCheck() {
+      
+      //로그인이 되어있으면 - 유저가 있으면, user를 인자값으로 넘겨준다.
+      firebaseEmailAuth.onAuthStateChanged(function (user) {
+        
+        if (user) {
+          //조회 - 데이터 베이스에 저장된 닉네임을 현재 접속되어 있는 user의 pk key 값을 이용해서 가져오기
+          firebaseDatabase.ref("users/" + user.uid).once('value').then(function (snapshot) {
+            
+            //자바스크립트 dom 선택자를 통해서 네비게이션 메뉴의 엘리먼트 변경해주기
+            document.getElementById("loginmenu").textContent = "로그아웃";
+            document.getElementById("loginmenu").href = "/logout.html";
+            document.getElementById("joinmenu").textContent = "반가워요! " + snapshot.val().name + " 님";
+            document.getElementById("joinmenu").href = "#";
+            document.getElementById("postSetMenu").textContent = "게시물 작성";
+            document.getElementById("postSetMenu").href = "/postSet.html";
+            document.getElementById("postGetMenu").textContent = "게시물 열람";
+            document.getElementById("postGetMenu").href = "/postGet.html"
+
+            name = snapshot.val().name;   //유저 닉네임은 계속 쓸거기 때문에 전역변수로 할당
+            loginUserKey = snapshot.key;  //로그인한 유저의 key도 계속 쓸 것이기 때문에 전역변수로 할당
+            userInfo = snapshot.val(); //snapshot.val()에 user 테이블에 있는 해당 개체 정보가 넘어온다. userInfo에 대입!
+            
+
+            //alert(userInfo.userid);  //uid는 db에서 user 테이블의 각 개체들의 pk 인데, 이 값은 인증에서 생성된 아이디의 pk 값과 같다. *중요!
+            thanksList();
+            return true
+          });
+
+        } else {
+                $('#comment').val("로그인하셔서 한끼 공유에 참여해주세요!");
+          return false
+        }
+      });
+    }
+
+    //감사글 목록가져와서 뿌려주기
+    function thanksList() {
+      //alert("thanksList")
+      //로그인한 유저라면
+      if(loginUserKey){
+          //alert(loginUserKey)
+          //글이 저장된 레퍼런스 값 가져오기
+          var thanksRef = firebaseDatabase.ref('meal');
+          //on 함수로 글 목록가져오기
+          thanksRef.on('child_added', on_thanks_list)
+      }else{
+        alert("실패")
+        return;
+      }
+
+
+    }
+
+    //땡스리스트 thanks 테이블의 thanks 키 들을 연속적으로 가져온다.
+    function on_thanks_list(data) {
+      console.log("on_thanks_list() 함수안으로 들어왔습니다 리스트를 가져오겠습니다")
+      var key = data.key;
+
+      var Data = data.val();
+      var comment = Data.comment;
+      var createtime = Data.createtime;
+      var name = Data.name;
+      var userkey = Data.userkey;
+
+      //alert(comment +"/"+ createtime + "/"+name +"/"+userkey);
+
+
+      //감사리스트 동적으로 붙이기
+      var html =
+        "<div class=\"media\" id='" + userkey + "' onclick=\"show_user_page(this.id)\">" +
+        "<div class=\"media-body\">" +
+        "<h4 class=\"media-heading\">" + name +
+        " <span STYLE=\"color: green; font-size: 5pt\">" + createtime + "</span></h4>" +
+        "<p>" + comment + "</p></div></div>" +
+        "<hr>";
+      
+      $(".thanksList").append(html);
+
+    }
+
   </script>
- 
- 
- 
+
+
+
 </body>
- 
+
 </html>

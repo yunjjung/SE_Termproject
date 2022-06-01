@@ -30,9 +30,7 @@
                   <li>
                       <a href="/">Home</a>
                   </li>
-                  <li>
-                      <a href="/mypage.html">마이페이지</a>
-                  </li>
+                 
                   <li>
                       <a id="joinmenu" href="/join.html">가입</a>
                   </li>
@@ -74,25 +72,27 @@
     <!-- 가입 폼 끝 -->
  
  
-    <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
-    <script>
-      var firebaseEmailAuth; //파이어베이스 email 인증 모듈 전역변수
-      var firebaseDatabase; //파이어베이스 db 모듈 전역변수
-      var userInfo; //가입한 유저의 정보. object 타입
-      //파이어 베이스 초기화 코드
-      const firebaseConfig = {
-      apiKey: "AIzaSyAvjWnfqbS9sOAvIpEgTvcmphwx80kjrmg",
-      authDomain: "cooking-fe116.firebaseapp.com",
-      databaseURL: "https://cooking-fe116-default-rtdb.firebaseio.com",
-      projectId: "cooking-fe116",
-      storageBucket: "cooking-fe116.appspot.com",
-      messagingSenderId: "384235512086",
-      appId: "1:384235512086:web:33dc2b31431965cc99b037"
+<script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+  <script>
+    var firebaseEmailAuth; //파이어베이스 email 인증 모듈 전역변수
+    var firebaseDatabase; //파이어베이스 db 모듈 전역변수
+    var userInfo; //가입한 유저의 정보. object 타입
+    //파이어 베이스 초기화 코드
+    var firebaseConfig = {
+        apiKey: "AIzaSyDfyKJQoZV33T0cTrQFroonu2wbA9tBL8o",
+        authDomain: "test2-25cd0.firebaseapp.com",
+        databaseURL: "https://test2-25cd0-default-rtdb.firebaseio.com",
+        projectId: "test2-25cd0",
+        storageBucket: "test2-25cd0.appspot.com",
+        messagingSenderId: "845884502935",
+        appId: "1:845884502935:web:a149b9f3198458707b4ad2",
+        measurementId: "G-Y6W6PVR7X8"
     };
-      firebase.initializeApp(firebaseConfig);
-
+    firebase.initializeApp(firebaseConfig);
+ 
     firebaseEmailAuth = firebase.auth(); //파이어베이스 인증 객체
-    firebaseDatabase = firebase.firebaseDatabase
+    firebaseDatabase = firebase.database(); //파이어베이스 데이터베이스 객체
+ 
     
  
     //제이쿼리를 사용한다.
@@ -104,7 +104,7 @@
         //제이쿼리 선택자와 val() 함수를 이용해서 이메일,비밀번호 값을 가져온다. 
         var email = $('#email').val();
         var password = $('#pwd').val();
-       // alert("로그인 버튼 눌렸음" + email +":"+ password);
+        //alert("로그인 버튼 눌렸음" + email +":"+ password);
     
     //파이어베이스 이메일 로그인 함수
     firebaseEmailAuth.signInWithEmailAndPassword(email, password)
@@ -127,10 +127,10 @@
     function loginSuccess(firebaseUser){
        alert("로그인 성공");
  
-  //   //로그인 성공한 유저 id 확인해 보기 - firebase database에 접근해서 데이터 조회 하는 함수
-  //  firebaseDatabase.ref("users/"+firebaseUser.uid).once('value').then(function(snapshot){
-  //       //alert(snapshot.val().name)
-  //   });
+    //로그인 성공한 유저 id 확인해 보기 - firebase database에 접근해서 데이터 조회 하는 함수
+   firebaseDatabase.ref("users/"+firebaseUser.uid).once('value').then(function(snapshot){
+        //alert(snapshot.val().name)
+    });
  
     //메인 페이지로 이동
     window.location.href = "/index.html"

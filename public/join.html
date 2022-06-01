@@ -30,9 +30,7 @@
                   <li>
                       <a href="/">Home</a>
                   </li>
-                  <li>
-                      <a href="/mypage.html">마이페이지</a>
-                  </li>
+                 
                   <li class="active">
                       <a id="joinmenu" href="/join.html">가입</a>
                   </li>
@@ -82,45 +80,33 @@
  
   <!--스크립트 부분. 자신의 스크립트 코드로 변경하세요! -->
   <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
-    <script>
-      var firebaseEmailAuth; //파이어베이스 email 인증 모듈 전역변수
-      var firebaseDatabase; //파이어베이스 db 모듈 전역변수
-      var userInfo; //가입한 유저의 정보. object 타입
-      //파이어 베이스 초기화 코드
-      const firebaseConfig = {
-      apiKey: "AIzaSyAvjWnfqbS9sOAvIpEgTvcmphwx80kjrmg",
-      authDomain: "cooking-fe116.firebaseapp.com",
-      databaseURL: "https://cooking-fe116-default-rtdb.firebaseio.com",
-      projectId: "cooking-fe116",
-      storageBucket: "cooking-fe116.appspot.com",
-      messagingSenderId: "384235512086",
-      appId: "1:384235512086:web:33dc2b31431965cc99b037"
+  <script>
+    var firebaseEmailAuth; //파이어베이스 email 인증 모듈 전역변수
+    var firebaseDatabase; //파이어베이스 db 모듈 전역변수
+    var userInfo; //가입한 유저의 정보. object 타입
+    //파이어 베이스 초기화 코드
+    const firebaseConfig = {
+        apiKey: "AIzaSyDfyKJQoZV33T0cTrQFroonu2wbA9tBL8o",
+        authDomain: "test2-25cd0.firebaseapp.com",
+        databaseURL: "https://test2-25cd0-default-rtdb.firebaseio.com",
+        projectId: "test2-25cd0",
+        storageBucket: "test2-25cd0.appspot.com",
+        messagingSenderId: "845884502935",
+        appId: "1:845884502935:web:a149b9f3198458707b4ad2",
+        measurementId: "G-Y6W6PVR7X8"
     };
       firebase.initializeApp(firebaseConfig);
-      firebaseEmailAuth = firebase.auth(); //파이어베이스 인증 객체
-      firebaseDatabase = firebase.database();//데이터 베이스함수 모듈
+      
+      firebaseEmailAuth = firebase.auth();
+      firebaseDatabase = firebase.database();
  
-      //const db = firebase.firestore() //파이어스토어객체를 파이어베이스로 부터 받아서 db라는 변수에 저장.
-    //   //firebase functions
-    // db.collection("users")
-    // function listUsers() {
-    //   return firestore.collection("users").onSnapshot(function (querySnapshot){
-    //    let users = [];
-    //    querySnapshot.forEach(function (doc) {
-    //      users.push({
-    //        id: doc.id,
-    //      });
-    //    });
-    //    console.log(users);
-    //   });
-    // }
-    // listUsers();
  
 //제이쿼리 
 $(document).ready(function(){
   
   //가입버튼 눌렀을 때 작동하는 함수
   $(document).on('click','.join',function(){
+ 
     //jquery를 이용해서 입력된 값을 가져온다.  
     var email = $('#email').val();
     var password = $('#pwd').val();
@@ -128,14 +114,17 @@ $(document).ready(function(){
  
 //이메일로 가입 버튼 눌렀을 때 작동되는 함수 - firebase 인증 모듈
 firebaseEmailAuth.createUserWithEmailAndPassword(email, password).then(function(user) {
+    
     userInfo = user; //가입 후 callBack 함수로 생성된 유저의 정보가 user에 담겨서 넘어온다. 전역변수에 할당.
+ 
     //뭐가 찍히는지 직접 체크해보세요.
     console.log("userInfo/"+userInfo); //오브젝트 타입
     console.log("userInfo.currentUser/"+userInfo.currentUser); //안됨
     console.log("userInfo.uid/"+userInfo.uid); //vPArtCHqPpOeIOpidEfug0Kgq3v1
+    
     //성공했을 때 작동되는 함수
     logUser(); 
-
+ 
 }, function(error) {
     //에러가 발생했을 때 
     var errorCode = error.code;
@@ -143,24 +132,21 @@ firebaseEmailAuth.createUserWithEmailAndPassword(email, password).then(function(
     alert(errorMessage);
    
 });
-
-//가입 성공했을 때 호출 되는 함수 - 위의 firebase의 인증 모듈과 다른 database 모듈임을 확인하자.
-function logUser(){
-    var ref = firebaseDatabase.ref("users/"+userInfo.uid); //저장될 곳을 users라는 부모 키를 레퍼런스로 지정.
-  
-     
-    //저장 형식
-     var obj = {
-         name: name,//왼쪽이 포맷,attribute이고 name이 실제값
-     };
-    
-  
-        //지금 파이어 베이스에 없으니까 자동으로 만들어줌.
-    ref.set(obj); // 고유한 자식 키가 하나 생성이 되면서 json 삽입
-    alert("가입성공");
  
-    //메인 페이지로 이동시키고 세션 저장시키기
-    window.location.href = "/login.html"
+//가입 성공했을 때 호출 되는 함수 - 위의 firebase의 인증 모듈과 다른 database 모듈임을 확인하자.
+      function logUser() {
+          var ref = firebaseDatabase.ref("users/" + userInfo.uid)//저장될 곳을 users라는 부모 키를 레퍼런스로 지정.
+          
+          //저장 형식
+          var obj = {
+              name: name,
+          };
+
+          ref.set(obj); // 고유한 자식 키가 하나 생셩이 되면서 json 삽입
+          alert("가입성공");
+ 
+          //메인 페이지로 이동시키고 세션 저장시키기
+          window.location.href = "/login.html"
 }
  
  
